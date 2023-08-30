@@ -1,4 +1,6 @@
-const estudiante = (
+const mongoose = require('mongoose');
+
+const estudiateSchema = mongoose.Schema(
     {
         ID: {
             type: Number,
@@ -22,3 +24,8 @@ const estudiante = (
         }
     }
 )
+
+const Estudiante = mongoose.model('Estudiante', estudiateSchema);
+
+
+module.exports = Estudiante;
