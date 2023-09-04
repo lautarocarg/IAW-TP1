@@ -1,31 +1,11 @@
-const mongoose = require('mongoose');
-
-const estudiateSchema = mongoose.Schema(
-    {
-        ID: {
-            type: Number,
-            required: [true, "Please enter a product name"]
-        },
-        Nombre: {
-            type: String,
-            required: true,
-        },
-        Apellido: {
-            type: String,
-            required: true,
-        },
-        fecha_nacimiento: {
-            type: Date,
-            required: false,
-        },
-        correo_electronico: {
-            type: String,
-            required: false,
-        }
+class Estudiante {
+    constructor(id, nombre, apellido, fechaNacimiento,correoElectronico ) {
+      this.id = id;
+      this.nombre = nombre;
+      this.apellido = apellido;
+      this.fechaNacimiento = fechaNacimiento;
+      this.correoElectronico = correoElectronico;
     }
-)
+  }
 
-const Estudiante = mongoose.model('Estudiante', estudiateSchema);
-
-
-module.exports = Estudiante;
+export default Estudiante;

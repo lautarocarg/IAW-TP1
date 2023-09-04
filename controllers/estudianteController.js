@@ -1,39 +1,36 @@
-const Estudiante = require("../models/estudianteModel")
+const { findById, find, create } = require("../utils/tools");
 
 const getEstudiantes = async(req, res) => {
     try{
-        const estudiante =  await Estudiante.find({});
+        const estudiante =  find();
         res.status(200).json(estudiante)
     }
-    catch {
+    catch(error) {
         res.status(500).json({message: error.message})
     }
-    res.send("POST request to the homepage");
 }
 
 const getEstudianteById =  async (req, res) => {
     try{
         const {id} = req.params;
-        const estudiante =  await Estudiante.findById(id);
+        const estudiante =  await findById(id);
         res.status(200).json(estudiante)
     }
     catch {
         res.status(500).json({message: error.message})
     }
-    res.send("POST request to the homepage");
 }
 
 //Listo
 const postEstudiante = async (req, res) => {
     try{
-        const estudiante =  await Estudiante.create(req.body)
+        const estudiante =  await create(req.body)
         const {id} = req.params;
         res.status(200).json({estudiante: estudiante})
     }
     catch {
         res.status(500).json({message: error.message})
     }
-    res.send("POST request to the homepage");
 };
 
 //Listo
@@ -50,7 +47,6 @@ const putEstudiante = async (req, res) => {
     catch {
         res.status(500).json({message: error.message})
     }
-    res.send("POST request to the homepage");
 };
 
 const deleteEstudiante = async (req, res) => {
@@ -65,7 +61,6 @@ const deleteEstudiante = async (req, res) => {
     catch {
         res.status(500).json({message: error.message})
     }
-    res.send("POST request to the homepage");
 };
 
 module.exports = {
