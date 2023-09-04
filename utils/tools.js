@@ -1,39 +1,32 @@
-const {mockEstudiantes} = require("../mock/estudiantesData.js");
-
-function mustBeInArray(array, id) {
-    return new Promise((resolve, reject) => {
-        const row = array.find(r => r.id == id)
-        if (!row) {
-            reject({
-                message: 'ID is not good',
-                status: 404
-            })
-        }
-        resolve(row)
-    })
-}
-
+const {estudiantes} = require("../mock/estudiantesData.js");
 
 function findById(id) {
-  return mockEstudiantes.estudiantes.find(
-    (estudiantes) => estudiantes.id === id
+  let estudiante =  estudiantes.find(
+    estudiante => estudiante.id == id
   );
+
+  return estudiante;
 }
 
 function find() {
-  return mockEstudiantes.estudiantes;
+  return estudiantes;
 }
 
 function create(estudiante) {
-  const newEstudiante = new Estudiante (
-    id = mockEstudiantes.estudiantes.length + 1,
-    nombre = estudiante.nombre,
-    apellido = estudiante.apellido,
-    fechaNacimiento = estudiante.fechaNacimiento,
-    correoElectronico = estudiante.correoElectronico,
-    );
-    mockEstudiantes.estudiantes.push(newEstudiante);
-  return newEstudiante;
+  let id = estudiantes.length + 1;
+  let estudianteFormated = { id,...estudiante}
+  estudiantes.push(estudianteFormated);
+  return estudianteFormated;
 }
 
-module.exports = {findById, find, create}
+function deleteById(id) {
+  let studentToDelete = estudiantes.findIndex(estudiante => estudiante.id == id);
+  if (!studentToDelete) {
+    throw Error `No existe estudiante con el ID ${id}`
+  }
+
+  estudiantes.splice(studentToDelete, 1);   
+  console.log(estudiantes)
+}
+
+module.exports = {findById, find, create, deleteById}

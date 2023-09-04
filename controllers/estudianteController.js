@@ -1,4 +1,5 @@
-const { findById, find, create } = require("../utils/tools");
+const { findById, find, create, deleteById } = require("../utils/tools");
+const { schema } = require("../models/estudianteModel");
 
 const getEstudiantes = async(req, res) => {
     try{
@@ -12,8 +13,8 @@ const getEstudiantes = async(req, res) => {
 
 const getEstudianteById =  async (req, res) => {
     try{
-        const {id} = req.params;
-        const estudiante =  await findById(id);
+        const id = parseInt(req.params.id);
+        const estudiante = findById(id);
         res.status(200).json(estudiante)
     }
     catch {
@@ -24,9 +25,9 @@ const getEstudianteById =  async (req, res) => {
 //Listo
 const postEstudiante = async (req, res) => {
     try{
-        const estudiante =  await create(req.body)
-        const {id} = req.params;
-        res.status(200).json({estudiante: estudiante})
+        schema.validate(req.body);
+        const estudiante = create(req.body)
+        res.status(200).json(estudiante)
     }
     catch {
         res.status(500).json({message: error.message})
@@ -51,17 +52,14 @@ const putEstudiante = async (req, res) => {
 
 const deleteEstudiante = async (req, res) => {
     try{
-        const {id} = req.params;
-        const estudiante =  await Estudiante.findByIdAndDelete(id);
-        if(!estudiante){
-            res.status(404).json({message: `No existe estudiante con el ID ${id}`})
-        }
-        res.status(200).json({message: `Eliminado estudiante con ID ${id}`})
+        const id = parseInt(req.params.id);
+        deleteById(id);
+        res.status(200).json({message: `El estudiante con ID:  ${id} fue eliminado`})
     }
-    catch {
+    catch(error){
         res.status(500).json({message: error.message})
     }
-};
+}
 
 module.exports = {
     getEstudiantes,
