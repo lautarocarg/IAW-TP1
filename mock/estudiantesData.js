@@ -1,5 +1,4 @@
-let mockEstudiantes = {
-  estudiantes: [
+let  estudiantes = [
     {
       id: 1,
       nombre: "jose",
@@ -35,7 +34,6 @@ let mockEstudiantes = {
       fechaNacimiento: "12/12/1999",
       correoElectronico: "fake@fake.com",
     },
-  ],
-};
+  ];
 
-module.exports = {mockEstudiantes}
+module.exports = {estudiantes}
