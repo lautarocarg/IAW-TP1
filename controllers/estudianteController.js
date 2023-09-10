@@ -1,81 +1,89 @@
-const { findById, find, create, deleteById, findByIdAndUpdate } = require("../utils/tools");
-const { schema } = require("../models/estudianteModel");
+const { findById, findAll, create, deleteById, findByIdAndUpdate } = require("../utils/tools");
+const { estudianteSchema } = require("../models/estudianteModel");
+const { HttpStatusCodes, sendResponse } = require("../middleware/httpHelper");
 
-const getEstudiantes = async(req, res) => {
-    try{
-        const estudiante =  find();
-        res.status(200).json(estudiante)
-    }
-    catch(error) {
-        res.status(500).json({message: error.message})
-    }
-}
+/**
+ * Obtiene todos los estudiantes.
+ * @param {object} req - Objeto de solicitud HTTP.
+ * @param {object} res - Objeto de respuesta HTTP.
+ */
+const getEstudiantes = async (req, res) => {
+  try {
+    const estudiantes = findAll();
+    return sendResponse(res, HttpStatusCodes.OK, estudiantes);
+  } catch (error) {
+    return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
+  }
+};
 
-const getEstudianteById =  async (req, res) => {
-    try{
-        const id = parseInt(req.params.id);
-        const estudiante = findById(id);
-        res.status(200).json(estudiante)
-    }
-    catch {
-        res.status(500).json({message: error.message})
-    }
-}
+/**
+ * Obtiene un estudiante por su ID.
+ * @param {object} req - Objeto de solicitud HTTP con el parámetro "id".
+ * @param {object} res - Objeto de respuesta HTTP.
+ */
+const getEstudianteById = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const estudiante = findById(id);
+    return sendResponse(res, HttpStatusCodes.OK, estudiante);
+  } catch (error) {
+    return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
+  }
+};
 
-//Listo
+/**
+ * Crea un nuevo estudiante.
+ * @param {object} req - Objeto de solicitud HTTP con los datos del estudiante en el cuerpo.
+ * @param {object} res - Objeto de respuesta HTTP.
+ */
 const postEstudiante = async (req, res) => {
-    try{
-        const { error, value } = schema.validate(req.body);
-        if(error){
-            throw error;
-        }
-        const estudiante = create(req.body)
-        res.status(200).json(estudiante)
-    }
-    catch(error) {
-        res.status(500).json({message: error.message})
-    }
+  try {
+    const estudiante = create(estudianteSchema.validate(req.body).value);
+    return sendResponse(res, HttpStatusCodes.CREATED, estudiante);
+  } catch (error) {
+    return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
+  }
 };
 
-//Listo
+/**
+ * Actualiza un estudiante por su ID.
+ * @param {object} req - Objeto de solicitud HTTP con el parámetro "id" y los datos del estudiante en el cuerpo.
+ * @param {object} res - Objeto de respuesta HTTP.
+ */
 const putEstudiante = (req, res) => {
-    try{
-        const { error, value } = schema.validate(req.body);
-        if(error){
-            throw error;
-        }
-        const estudianteUpdate = req.body;
+  try {
+    const estudianteUpdated = estudianteSchema.validate(req.body).value;
 
-        if(!req.params.id){
-            throw 'Debe indicar un id'
-        }
-        const id = parseInt(req.params.id);
-        const estudiante =  findByIdAndUpdate(id, estudianteUpdate);
-        if(!estudiante){
-            res.status(404).json({message: `No existe estudiante con el ID ${id}`})
-        }
-        res.status(200).json(estudiante)
+    const id = parseInt(req.params.id);
+    const estudiante = findByIdAndUpdate(id, estudianteUpdated);
+    if (!estudiante) {
+        return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: `No existe estudiante con el ID ${id}` });
     }
-    catch(error) {
-        res.status(500).json({message: error.message})
-    }
+    return sendResponse(res, HttpStatusCodes.OK, { message: estudiante });
+  } catch (error) {
+    return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
+  }
 };
 
+/**
+ * Elimina un estudiante por su ID.
+ * @param {object} req - Objeto de solicitud HTTP con el parámetro "id".
+ * @param {object} res - Objeto de respuesta HTTP.
+ */
 const deleteEstudiante = async (req, res) => {
-    try{
-        const id = parseInt(req.params.id);
-        deleteById(id);
-        res.status(200).json({message: `El estudiante con ID:  ${id} fue eliminado`})
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-}
+  try {
+    const id = parseInt(req.params.id);
+    deleteById(id);
+    return sendResponse(res, HttpStatusCodes.OK, { message: `El estudiante con ID: ${id} fue eliminado` });
+  } catch (error) {
+    return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
+  }
+};
 
 module.exports = {
-    getEstudiantes,
-    getEstudianteById,
-    postEstudiante,
-    putEstudiante,
-    deleteEstudiante,
-}
+  getEstudiantes,
+  getEstudianteById,
+  postEstudiante,
+  putEstudiante,
+  deleteEstudiante,
+};

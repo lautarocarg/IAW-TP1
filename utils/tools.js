@@ -8,7 +8,7 @@ function findById(id) {
   return estudiante;
 }
 
-function find() {
+function findAll() {
   return estudiantes;
 }
 
@@ -43,4 +43,4 @@ function findByIdAndUpdate(id, estudianteUpdate) {
   return studentToUpdate; 
 }
 
-module.exports = {findById, find, create, deleteById, findByIdAndUpdate}
+module.exports = {findById, findAll, create, deleteById, findByIdAndUpdate}

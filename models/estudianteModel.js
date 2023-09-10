@@ -1,11 +1,11 @@
 const Joi = require("joi");
 
-const schema = Joi.object({
+const estudianteSchema = Joi.object({
   nombre: Joi.string().alphanum().min(3).max(30).required(),
 
   apellido: Joi.string().alphanum().min(3).max(30).required(),
 
-  fechaNacimiento: Joi.date().less(new Date()),
+  fechaNacimiento: Joi.date().less(new Date()).required(),
 
   correoElectronico: Joi.string().email({
     minDomainSegments: 2,
@@ -13,4 +13,4 @@ const schema = Joi.object({
   }),
 });
 
-module.exports = {schema}
+module.exports = {estudianteSchema}
