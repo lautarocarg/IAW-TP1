@@ -6,15 +6,14 @@ const errorHandler = require("./middleware/errorHandler");
 const { auth } = require('express-oauth2-jwt-bearer');
 
 const app = express();
-const PORT = process.env.PORT;
-const PASSWORD = process.env.PASSWORD;
-const USER = process.env.USER;
+const PORT = process.env.PORT || 4200;
+
 
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
-  audience: 'https://api.example.com/estudiantes',
-  issuerBaseURL: 'https://dev-sm0minl1tenjr0wb.us.auth0.com/',
+  audience: process.env.AUDIENCE,
+  issuerBaseURL: process.env.ISSUERBASEURL,
   tokenSigningAlg: 'RS256'
 });
 
@@ -24,6 +23,11 @@ app.use(
     extended: true,
   })
 );
+
+// Ruta base
+app.get("/", (req, res) => {
+  res.send("API de estudiantes");
+});
 
 app.use('/api/estudiantes', checkJwt, estudianteRoute);
 
