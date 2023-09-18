@@ -1,16 +1,20 @@
 const express = require("express");
+const { requiredScopes } = require('express-oauth2-jwt-bearer');
 const router = express.Router();
 const {getEstudiantes, getEstudianteById, postEstudiante, putEstudiante, deleteEstudiante} = require('../controllers/estudianteController')
+  
+const checkScopesRead = requiredScopes('read:estudiantes');
+const checkScopesWrite = requiredScopes('write:estudiantes');
 
-router.get("/", getEstudiantes);
+router.get("/",checkScopesRead, getEstudiantes);
 
-router.get("/:id", getEstudianteById);
+router.get("/:id",checkScopesRead, getEstudianteById);
 
-router.post("/", postEstudiante);
+router.post("/",checkScopesWrite, postEstudiante);
 
-router.put("/:id", putEstudiante);
+router.put("/:id",checkScopesWrite, putEstudiante);
 
-router.delete("/:id", deleteEstudiante);
+router.delete("/:id",checkScopesWrite, deleteEstudiante);
 
 
 module.exports = router;
