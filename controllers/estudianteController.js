@@ -25,6 +25,9 @@ const getEstudianteById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const estudiante = findById(id);
+    if (!estudiante) {
+        return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: `No existe estudiante con el ID ${id}` });
+    }
     return sendResponse(res, HttpStatusCodes.OK, estudiante);
   } catch (error) {
     return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
@@ -38,7 +41,11 @@ const getEstudianteById = async (req, res) => {
  */
 const postEstudiante = async (req, res) => {
   try {
-    const estudiante = create(estudianteSchema.validate(req.body).value);
+    const { error, value } = estudianteSchema.validate(req.body);
+    if(error){
+        return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: `${error}` });
+    }
+    const estudiante = create(req.body);
     return sendResponse(res, HttpStatusCodes.CREATED, estudiante);
   } catch (error) {
     return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: error.message });
@@ -52,10 +59,13 @@ const postEstudiante = async (req, res) => {
  */
 const putEstudiante = (req, res) => {
   try {
-    const estudianteUpdated = estudianteSchema.validate(req.body).value;
+    const { error, value } = estudianteSchema.validate(req.body);
+    if(error){
+        return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: `${error}` });
+    }
 
     const id = parseInt(req.params.id);
-    const estudiante = findByIdAndUpdate(id, estudianteUpdated);
+    const estudiante = findByIdAndUpdate(id, req.body);
     if (!estudiante) {
         return sendResponse(res, HttpStatusCodes.BAD_REQUEST, { message: `No existe estudiante con el ID ${id}` });
     }

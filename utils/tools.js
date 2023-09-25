@@ -22,7 +22,8 @@ function create(estudiante) {
 function deleteById(id) {
   let indexStudentToDelete = estudiantes.findIndex(estudiante => estudiante.id == id);
   if (indexStudentToDelete < 0) {
-    throw Error `No existe estudiante con el ID ${id}`
+    message = 'No existe estudiante con el ID ' + id
+    throw Error(message)
   }
 
   estudiantes.splice(indexStudentToDelete, 1);   
@@ -31,7 +32,8 @@ function deleteById(id) {
 function findByIdAndUpdate(id, estudianteUpdate) {
   let indexStudentToUpdate = estudiantes.findIndex(estudiante => estudiante.id === id);
   if (indexStudentToUpdate < 0) {
-    throw Error `No existe estudiante con el ID ${id}`
+    message = 'No existe estudiante con el ID ' + id
+    throw Error(message)
   }
 
   let studentToUpdate = estudiantes[indexStudentToUpdate];   
@@ -43,4 +45,13 @@ function findByIdAndUpdate(id, estudianteUpdate) {
   return studentToUpdate; 
 }
 
-module.exports = {findById, findAll, create, deleteById, findByIdAndUpdate}
+function parseFecha(fecha){
+  var dia = fecha.getDate();
+  var mes = fecha.getMonth() + 1; 
+  var año = fecha.getFullYear();
+  
+  var fechaFormateada = dia + '/' + (mes < 10 ? '0' : '') + mes + '/' + año;
+  return fechaFormateada
+  }
+
+module.exports = {findById, findAll, create, deleteById, findByIdAndUpdate, parseFecha}
